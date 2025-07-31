@@ -39,6 +39,7 @@ return { -- Autocompletion
     local cmp = require 'cmp'
     local luasnip = require 'luasnip'
     luasnip.config.setup {}
+    require('luasnip.loaders.from_lua').load { paths = '~/.config/nvim/snippets' }
 
     local kind_icons = {
       Text = '󰉿',
@@ -173,4 +174,3 @@ return { -- Autocompletion
     }
   end,
 }
-

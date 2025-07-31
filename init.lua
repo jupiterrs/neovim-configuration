@@ -28,4 +28,6 @@ require('lazy').setup {
     require 'plugins.vimtex',
     require 'plugins.comment',
     require 'plugins.toggleterm',
+    require 'plugins.ionide',
+    require 'plugins.dadbod',
 }

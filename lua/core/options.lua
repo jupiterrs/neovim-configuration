@@ -1,6 +1,18 @@
 vim.wo.number = true -- Make line numbers default (default: false)
 vim.o.relativenumber = true -- Set relative numbered lines (default: false)
-vim.o.clipboard = 'unnamedplus' -- Sync clipboard between OS and Neovim. (default: '')
+vim.o.clipboard = 'unnamedplus'
+vim.g.clipboard = {
+    name = 'win32yank-wsl',
+    copy = {
+        ['+'] = 'win32yank.exe -i --crlf',
+        ['*'] = 'win32yank.exe -i --crlf',
+    },
+    paste = {
+        ['+'] = 'win32yank.exe -o --lf',
+        ['*'] = 'win32yank.exe -o --lf',
+    },
+    cache_enabled = true,
+} -- Sync clipboard between OS and Neovim. (default: '')
 vim.o.wrap = false -- Display lines as one long line (default: true)
 vim.o.linebreak = true -- Companion to wrap, don't split words (default: false)
 vim.o.mouse = 'a' -- Enable mouse mode (default: '')
@@ -41,3 +53,22 @@ vim.opt.shortmess:append 'c' -- Don't give |ins-completion-menu| messages (defau
 vim.opt.iskeyword:append '-' -- Hyphenated words recognized by searches (default: does not include '-')
 vim.opt.formatoptions:remove { 'c', 'r', 'o' } -- Don't insert the current comment leader automatically for auto-wrapping comments using 'textwidth', hitting <Enter> in insert mode, or hitting 'o' or 'O' in normal mode. (default: 'croql')
 vim.opt.runtimepath:remove '/usr/share/vim/vimfiles' -- Separate Vim plugins from Neovim in case Vim still in use (default: includes this path if Vim is installed)
+-- Configure global diagnostic settings
+vim.diagnostic.config {
+    virtual_text = true, -- Enables virtual text for diagnostics
+    signs = true, -- Shows signs in the gutter (e.g., arrows, icons)
+    underline = true, -- Underlines diagnostics in the text
+    update_in_insert = false, -- Do not update diagnostics in insert mode
+}
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'c', 'cpp' },
+    callback = function()
+        -- Override sleuth settings after it runs
+        vim.defer_fn(function()
+            vim.opt_local.tabstop = 4
+            vim.opt_local.shiftwidth = 4
+            vim.opt_local.softtabstop = 4
+            vim.opt_local.expandtab = false
+        end, 20) -- delay slightly to override sleuth
+    end,
+})

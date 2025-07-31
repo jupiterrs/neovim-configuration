@@ -152,7 +152,7 @@ return {
         --  - settings (table): Override the default settings passed when initializing the server.
         --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
         local servers = {
-            -- clangd = {},
+            clangd = {},
             -- gopls = {},
             -- pyright = {},
             -- rust_analyzer = {},
@@ -163,23 +163,27 @@ return {
             --
             -- But for many setups, the LSP (`tsserver`) will work just fine
             ts_ls = {}, -- tsserver is deprecated
-            ruff = {},
-            pylsp = {
-                settings = {
-                    pylsp = {
-                        plugins = {
-                            pyflakes = { enabled = false },
-                            pycodestyle = { enabled = false },
-                            autopep8 = { enabled = false },
-                            yapf = { enabled = false },
-                            mccabe = { enabled = false },
-                            pylsp_mypy = { enabled = false },
-                            pylsp_black = { enabled = false },
-                            pylsp_isort = { enabled = false },
-                        },
-                    },
+            ruff = {
+                capabilities = {
+                    positionEncoding = { 'utf-16' },
                 },
             },
+            -- pylsp = {
+            --     settings = {
+            --         pylsp = {
+            --             plugins = {
+            --                 pyflakes = { enabled = false },
+            --                 pycodestyle = { enabled = false },
+            --                 autopep8 = { enabled = false },
+            --                 yapf = { enabled = false },
+            --                 mccabe = { enabled = false },
+            --                 pylsp_mypy = { enabled = false },
+            --                 pylsp_black = { enabled = false },
+            --                 pylsp_isort = { enabled = false },
+            --             },
+            --         },
+            --     },
+            -- },
             html = { filetypes = { 'html', 'twig', 'hbs' } },
             cssls = {},
             tailwindcss = {},
@@ -201,12 +205,12 @@ return {
                         runtime = { version = 'LuaJIT' },
                         workspace = {
                             checkThirdParty = false,
-                            library = {
-                                '${3rd}/luv/library',
-                                unpack(vim.api.nvim_get_runtime_file('', true)),
-                            },
+                            library = vim.api.nvim_get_runtime_file('', true),
                         },
-                        diagnostics = { disable = { 'missing-fields' } },
+                        diagnostics = {
+                            disable = { 'missing-fields' },
+                            globals = { 'vim' },
+                        },
                         format = {
                             enable = false,
                         },
