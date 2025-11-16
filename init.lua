@@ -30,4 +30,5 @@ require('lazy').setup {
     require 'plugins.toggleterm',
     require 'plugins.ionide',
     require 'plugins.dadbod',
+    require 'plugins.metals',
 }
